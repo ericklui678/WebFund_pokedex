@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Pokedex</title>
+        <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // Gets images and assigns ID to all 151 pokemon
+            for (var i  = 1; i < 152; i++){
+                $('#pokemonImages').append("<img id=" + i + " class='pokemon' src='http://pokeapi.co/media/img/" + i + ".png'>");
+            }
+            $('.pokemon').click(function(){
+                // url will now link to the pokemon that was clicked
+                var numID = $(this).attr('id');
+                var url = "http://pokeapi.co/api/v1/pokemon/" + numID;
+                console.log(url);
+
+                // request info from that pokemon url and store in variable res
+                $.get(url, function(res) {
+                    var html_str = "";
+                    html_str += '<h1>' + res.name + '</h1>';
+                    html_str += "<img id='display' src='http://pokeapi.co/media/img/" + numID + ".png'>";
+                    html_str += '<h2>Types</h2><ul>'
+                    for(var i = 0; i < res.types.length; i++) {
+                        html_str += "<li>" + res.types[i].name + "</li>";
+                    }
+                    html_str += "</ul>";
+                    html_str += '<h2>Height</h2>' + '<p>' + res.height + '</p>';
+                    html_str += '<h2>Weight</h2>' + '<p>' + res.weight + '</p>'
+                    $('#pokeInfo').html(html_str);
+                }, "json");
+            });
+
+        });
+    </script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="pokemonImages">
+            </div>
+            <div id="pokedex">
+                <div id="pokeInfo">
+                </div>
+                <img id="pokeball" src="./images/pokeball.png">
+            </div>
+        </div>
+    </body>
+</html>
